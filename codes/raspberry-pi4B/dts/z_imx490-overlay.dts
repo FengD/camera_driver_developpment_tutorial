@@ -1,0 +1,120 @@
+// zuojisi
+// Definitions for IMX490 camera module on VC I2C bus
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+/{
+	compatible = "brcm,bcm2835";
+
+	fragment@1000{
+		target = <&{/zuojisi/branch}>;
+		__overlay__{
+				label = "z_imx490 20240916";
+		};
+	};
+
+	fragment@0 {
+		target = <&i2c0if>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	clk_frag: fragment@1 {
+		target = <&cam1_clk>;
+		__overlay__ {
+			status = "okay";
+			clock-frequency = <24000000>;
+		};
+	};
+
+	fragment@2 {
+		target = <&i2c0mux>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	i2c_frag: fragment@100 {
+		target = <&i2c_csi_dsi>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+			cam_node: imx490@3c {
+				compatible = "sony,z_imx490";
+				reg = <0x3c>;
+				status = "okay";
+
+				clocks = <&cam1_clk>;
+				clock-names = "xclk";
+
+				VANA-supply = <&cam1_reg>;	/* 2.8v */
+				VDIG-supply = <&cam_dummy_reg>;	/* 1.8v */
+				VDDL-supply = <&cam_dummy_reg>;	/* 1.2v */
+
+				rotation = <180>;
+				orientation = <2>;
+
+				port {
+					cam_endpoint: endpoint {
+						clock-lanes = <0>;
+						data-lanes = <1 2>;
+						clock-noncontinuous;
+						link-frequencies =
+							/bits/ 64 <750000000>;
+					};
+				};
+			};
+
+
+			vcm: ad5398@c {
+				compatible = "adi,ad5398";
+				reg = <0x0c>;
+				status = "disabled";
+				VANA-supply = <&cam1_reg>;
+			};
+		};
+	};
+
+	csi_frag: fragment@101 {
+		target = <&csi1>;
+		csi: __overlay__ {
+			status = "okay";
+			brcm,media-controller;
+
+			port {
+				csi_ep: endpoint {
+					remote-endpoint = <&cam_endpoint>;
+					clock-lanes = <0>;
+					data-lanes = <1 2>;
+					clock-noncontinuous;
+				};
+			};
+		};
+	};
+
+	__overrides__ {
+		rotation = <&cam_node>,"rotation:0";
+		orientation = <&cam_node>,"orientation:0";
+		media-controller = <&csi>,"brcm,media-controller?";
+		cam0 = <&i2c_frag>, "target:0=",<&i2c_vc>,
+		       <&csi_frag>, "target:0=",<&csi0>,
+		       <&clk_frag>, "target:0=",<&cam0_clk>,
+		       <&cam_node>, "clocks:0=",<&cam0_clk>,
+		       <&cam_node>, "VANA-supply:0=",<&cam0_reg>,
+		       <&vcm>, "VANA-supply:0=", <&cam0_reg>;
+		vcm = <&vcm>, "status=okay",
+		      <&cam_node>,"lens-focus:0=", <&vcm>;
+	};
+};
+
+&cam_node {
+	status = "okay";
+};
+
+&cam_endpoint {
+	remote-endpoint = <&csi_ep>;
+};

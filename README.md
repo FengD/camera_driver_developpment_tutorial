@@ -11,9 +11,16 @@ For those interested in using cameras for tasks like robotics or deep learning-b
 * 3. Demo & Annexes
 
 # 0. How a camera work
-![camera](camera.png)
+* With the picture below you could find exactly the pipeline of a camera. If we want to get the images from the SoC. The hardware pass throught from input to output are `Lens -> Sensor -> ISP(Optional on Camera or On SoC) -> Ser/Des -> SoC`.
+
+* The Sensor, ISP, Ser/Des could control or config by I2C and get the forward data by MIPI, which is the logic of the camera driver.
+
+![camera](./sources/camera.png)
 
 # 1. The Steps of the Camera Driver Developpment
+
+1. Config & Compile the Device Tree. i2c command could be used to check whether the device(sensor, ser/des) appears on the I2c Bus.
+
 
 # 2. The Best practice on Jetson Orin nano and Raspberry Pi 4B
 
