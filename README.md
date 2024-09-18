@@ -5,12 +5,13 @@ As a software engineer, I have completed the development of a camera driver as a
 For those interested in using cameras for tasks like robotics or deep learning-based detection, this tutorial will also offer valuable insights. It will help you understand how to set up the camera for real-time image capture, which can be applied to projects such as object detection, autonomous navigation, or other AI-driven tasks. Additionally, I will include examples and source code for getting the IMX390C and IMX490C working on Jetson and Raspberry Pi.
 
 # Content
-## 0. How a camera work
-## 1. The Steps of the Camera Driver Developpment
-## 2. The Best practice on Jetson Orin nano and Raspberry Pi 4B
-## 3. Demo & Annexes
+* 0. How a camera work
+* 1. The Steps of the Camera Driver Developpment
+* 2. The Best practice on Jetson Orin nano and Raspberry Pi 4B
+* 3. Demo & Annexes
 
 # 0. How a camera work
+[camera](camera.png)
 
 # 1. The Steps of the Camera Driver Developpment
 
