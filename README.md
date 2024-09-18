@@ -11,7 +11,7 @@ For those interested in using cameras for tasks like robotics or deep learning-b
 * 3. Demo & Annexes
 
 # 0. How a camera work
-[camera](camera.png)
+![camera](camera.png)
 
 # 1. The Steps of the Camera Driver Developpment
 
